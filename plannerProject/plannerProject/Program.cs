@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -156,8 +157,46 @@ namespace plannerProject
 
             } else
             {
-                Console.WriteLine($"Contato não encontrado, verifique se o e-mail passados está correto: {oldEmail}");
+                Console.WriteLine($"Contato não encontrado, verifique se o e-mail passado está correto: {oldEmail}");
             }
+        }
+
+        static bool DeleteContact(string[] emails, string[] names, int totalRecordsCount, string emailToDelete)
+        {
+            bool sucessOnDelete = false;
+            int contactPosition = 0;
+
+            try
+            {
+                Console.WriteLine("Procurando contato...");
+
+                contactPosition = SearchContacts(emails, totalRecordsCount, emailToDelete);
+
+                if (contactPosition != -1)
+                {
+                    for (int i = contactPosition; i <= totalRecordsCount; i++)
+                    {
+                        emails[contactPosition] = emails[contactPosition + 1];
+                        names[contactPosition] = names[contactPosition + 1];
+                    }
+
+                    if (SearchContacts(emails, totalRecordsCount, emailToDelete) == -1)
+                    {
+                       
+                        sucessOnDelete = true;
+                        return sucessOnDelete;
+                    }
+                }
+               
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+      
+            }
+
+            return sucessOnDelete;
+
+            
         }
 
 
@@ -167,12 +206,15 @@ namespace plannerProject
             string[] emails = new String[200];
             string searchEmail = "";
             string oldEmail = "";
+            string emailToDelete = "";
             
 
 
             int menuSelectedOption = 0;
             int totalRecordsCount = 0;
             int positionContact = 0;
+
+            bool contactWasDeleted = false; 
 
             while (menuSelectedOption != 6)
             {
@@ -196,7 +238,28 @@ namespace plannerProject
                         Console.ReadKey();
                             break;
                     case 4:
-                        break;
+                        Console.WriteLine("Vamos deletar um contato");
+
+                        ShowContacts(names, emails, totalRecordsCount);
+
+                        Console.Write("Insira o e-mail do contato que você deseja deletar: ");
+                        emailToDelete = Console.ReadLine();
+                        contactWasDeleted = DeleteContact(emails, names, totalRecordsCount, emailToDelete);
+
+
+                        if (contactWasDeleted)
+                        {
+                            Console.WriteLine("Contato deletado com sucesso");
+                            ShowContacts(names, emails, totalRecordsCount);
+                            totalRecordsCount--;
+                        } else
+                        {
+                            Console.WriteLine("Não foi possível localizar o contato selecionado");
+                        }
+                        Console.Write("Pressione qualquer tecla para sair: ");
+                        Console.ReadKey();
+
+                            break;
                     case 5:
                         Console.Write("Insira o e-mail do contato que você quer procurar: ");
                         searchEmail = Console.ReadLine();
@@ -204,7 +267,7 @@ namespace plannerProject
                         if (positionContact != -1)
                         {
                             Console.WriteLine("Nome: {0} | E-mail: {1}", names[positionContact], emails[positionContact]);
-
+                            
                         }
                         else
                         {
