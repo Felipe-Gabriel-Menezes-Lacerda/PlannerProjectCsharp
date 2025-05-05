@@ -39,7 +39,7 @@ namespace plannerProject
                 }
             } catch(Exception error)
             {
-                Console.WriteLine("ERROR: não há contatos salvos");
+                Console.WriteLine("ERROR: não há contatos salvos" + error);
                 Console.Write("Pressione qualquer tecla para sair: ");
                 Console.ReadKey();
             }
@@ -209,12 +209,11 @@ namespace plannerProject
             string emailToDelete = "";
             
 
-
             int menuSelectedOption = 0;
             int totalRecordsCount = 0;
             int positionContact = 0;
 
-            bool contactWasDeleted = false; 
+            bool contactWasDeleted = false;
 
             while (menuSelectedOption != 6)
             {
@@ -282,6 +281,8 @@ namespace plannerProject
                 }
 
             }
+
+            Backup.SetData(ref emails, ref names, ref totalRecordsCount);
 
         }
    
