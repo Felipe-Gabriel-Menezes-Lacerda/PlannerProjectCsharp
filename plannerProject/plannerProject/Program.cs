@@ -215,6 +215,8 @@ namespace plannerProject
 
             bool contactWasDeleted = false;
 
+            Backup.GetData(ref emails, ref names, ref totalRecordsCount);
+
             while (menuSelectedOption != 6)
             {
                 menuSelectedOption = ShowMenu();

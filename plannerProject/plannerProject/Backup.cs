@@ -14,17 +14,48 @@ namespace plannerProject
 
         public static void SetData(ref string[] emails, ref string[] names,ref int totalRecordsCount)
         {
-            StreamWriter setData = new StreamWriter(documentName);
-
-            for (int i = 0; i < totalRecordsCount; i++)
+            try
             {
-                setData.WriteLine($"{names[i]} - {emails[i]}");
+
+                StreamWriter setData = new StreamWriter(documentName);
+
+                for (int i = 0; i < totalRecordsCount; i++)
+                {
+                    setData.WriteLine($"{names[i]}-{emails[i]}");
+                }
+                setData.Close();
+            } catch(Exception error)
+            {
+                Console.WriteLine(error);
             }
-            setData.Close();
         }
 
-        public static void GetData()
+        public static void GetData(ref string[] emails, ref string[] names, ref int totalRecordsCount)
         {
+            try
+            { 
+                totalRecordsCount = 0;
+                int charDivisorPosition = 0;
+
+                StreamReader documentReader = new StreamReader(documentName);
+                string documentContactLine = documentReader.ReadLine();
+            
+                while (documentContactLine != null)
+                {
+                    
+                    charDivisorPosition = documentContactLine.IndexOf("-");
+                    names[totalRecordsCount] = documentContactLine.Substring(0, charDivisorPosition);
+                    emails[totalRecordsCount] = documentContactLine.Substring(charDivisorPosition + 1);
+                    totalRecordsCount++; // totalRecordsCount = totalRecordsCount + 1;
+                    documentContactLine = documentReader.ReadLine();
+                }
+                documentReader.Close();
+                
+            } catch(Exception error)
+            {
+                Console.WriteLine(error);
+            }
+
 
         }
 
